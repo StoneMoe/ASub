@@ -10,7 +10,7 @@ from qframelesswindow import FramelessWindow
 from app.core.models.project import Project
 from app.ui.config import cfg
 from app.ui.const import APP_NAME
-from app.ui.utils import StdoutProxy
+from app.ui.utils import StdoutProxy, res_dir
 from app.ui.views import HomeView, ProjectView, SettingView
 from app.ui.widgets import FancyTitleBar
 
@@ -56,7 +56,7 @@ class MainWindow(FramelessWindow):
         self.setTitleBar(FancyTitleBar(self))
         self.titleBar.setAttribute(Qt.WA_StyledBackground)
 
-        self.setWindowIcon(QIcon('app/ui/resource/logo.jpg'))
+        self.setWindowIcon(QIcon(res_dir('app/ui/resource/logo.jpg')))
         self.setWindowTitle(APP_NAME)
 
         # screen center
@@ -112,7 +112,7 @@ class MainWindow(FramelessWindow):
 
     def _set_qss(self):
         color = 'dark' if isDarkTheme() else 'light'
-        with open(f'app/ui/resource/qss/{color}/style.qss', encoding='utf-8') as f:
+        with open(res_dir(f'app/ui/resource/qss/{color}/style.qss'), encoding='utf-8') as f:
             self.setStyleSheet(f.read())
 
     def _switch_to(self, widget):

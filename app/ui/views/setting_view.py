@@ -11,6 +11,7 @@ from qfluentwidgets import (SettingCardGroup, SwitchSettingCard, PrimaryPushSett
 from app.core import Core
 from app.core.utils.env import check_ffmpeg
 from app.ui.config import cfg, TranscribeLang
+from app.ui.utils import res_dir
 
 if typing.TYPE_CHECKING:
     from app.ui import MainWindow
@@ -142,7 +143,7 @@ class SettingView(ScrollArea):
         self.label_setting.setObjectName('settingLabel')
 
         theme = 'dark' if isDarkTheme() else 'light'
-        with open(f'app/ui/resource/qss/{theme}/setting_view.qss', encoding='utf-8') as f:
+        with open(res_dir(f'app/ui/resource/qss/{theme}/setting_view.qss'), encoding='utf-8') as f:
             self.setStyleSheet(f.read())
 
     def _show_restart_tooltip(self):
