@@ -165,7 +165,10 @@ class ProjectView(QFrame):
             prompt_name='',
         )
         self.sig_transcribe_running.emit(True)
-        self.project.transcribe(opt)
+        try:
+            self.project.transcribe(opt)
+        except Exception as e:
+            print(f'听写时发生错误: {repr(e)}')
         self.sig_transcribe_running.emit(False)
         self._reload_subtitle_list()
 
