@@ -1,0 +1,64 @@
+* {
+    font-family: 'Microsoft YaHei UI';
+    color: black;
+}
+
+MainWindow {
+    background-color: rgb(249, 249, 249);
+}
+
+FancyTitleBar > QLabel#titleLabel {
+    background: transparent;
+    font-size: 13px;
+    padding: 0 4px;
+}
+
+MinimizeButton {
+    qproperty-normalColor: black;
+    qproperty-normalBackgroundColor: transparent;
+    qproperty-hoverColor: black;
+    qproperty-hoverBackgroundColor: rgba(80, 80, 80, 26);
+    qproperty-pressedColor: black;
+    qproperty-pressedBackgroundColor: rgba(30, 30, 30, 51);
+}
+
+MaximizeButton {
+    qproperty-normalColor: black;
+    qproperty-normalBackgroundColor: transparent;
+    qproperty-hoverColor: black;
+    qproperty-hoverBackgroundColor: rgba(80, 80, 80, 26);
+    qproperty-pressedColor: black;
+    qproperty-pressedBackgroundColor: rgba(30, 30, 30, 51);
+}
+
+CloseButton {
+    qproperty-normalColor: black;
+    qproperty-normalBackgroundColor: transparent;
+}
+
+HomeView > #app-title, StubWidget > #title {
+    font-family: 'Microsoft YaHei Light';
+    font-size: 32pt;
+    qproperty-alignment: 'AlignBottom | AlignHCenter';
+}
+
+HomeView > * {
+    qproperty-alignment: AlignHCenter;
+}
+
+HomeView > #app-desc, StubWidget > #desc {
+    font-size: 12pt;
+    margin-top: 10px;
+    qproperty-alignment: AlignHCenter;
+}
+
+#ViewTitle {
+    font-size: 20pt;
+    font-family: 'Microsoft YaHei Light';
+}
+
+#ViewSubtitle {
+    font-size: 12pt;
+    font-weight: bold;
+    margin-top: 26px;
+}
