@@ -1,5 +1,5 @@
 * {
-    font-family: 'Microsoft YaHei UI';
+    font: 9pt 'Microsoft YaHei UI';
     color: white;
 }
 
@@ -9,7 +9,7 @@ MainWindow {
 
 FancyTitleBar > QLabel#titleLabel {
     background: transparent;
-    font-size: 13px;
+    font-size: 9.75pt;
     padding: 0 4px;
 }
 
@@ -53,8 +53,7 @@ HomeView > #app-desc, StubWidget > #desc {
 }
 
 #ViewTitle {
-    font-size: 20pt;
-    font-family: 'Microsoft YaHei Light';
+    font: 24.5pt 'Microsoft YaHei Light';
 }
 
 #ViewSubtitle {

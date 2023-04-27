@@ -13,9 +13,6 @@ from app.core.utils.env import check_ffmpeg
 from app.ui.config import cfg, TranscribeLang
 from app.ui.utils import res_dir
 
-if typing.TYPE_CHECKING:
-    from app.ui import MainWindow
-
 
 class SettingView(ScrollArea):
     aboutSig = pyqtSignal()

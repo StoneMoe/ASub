@@ -6,6 +6,7 @@ class Core:
     DIR_PROJECTS = './data/projects'
     CODEC: str = 'utf-8'
     EXEC_PATH: str = os.path.dirname(os.path.abspath(sys.argv[0]))
+    DPI_SCALE = True
 
     @classmethod
     def init(cls):
