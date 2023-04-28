@@ -1,5 +1,3 @@
-import typing
-
 from PyQt5.QtCore import Qt, pyqtSignal, QUrl
 from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtWidgets import QWidget, QLabel
@@ -11,6 +9,7 @@ from qfluentwidgets import (SettingCardGroup, SwitchSettingCard, PrimaryPushSett
 from app.core import Core
 from app.core.utils.env import check_ffmpeg
 from app.ui.config import cfg, TranscribeLang
+from app.ui.const import APP_VER
 from app.ui.utils import res_dir
 
 
@@ -93,7 +92,7 @@ class SettingView(ScrollArea):
         self.card_about = PrimaryPushSettingCard(
             '检查更新',
             FIF.INFO, self.tr('关于'),
-            f'© 版权所有 2023, StoneMoe. 版本 alpha',
+            f'© 版权所有 2023, StoneMoe. 版本 {APP_VER}',
             self.group_about
         )
 

@@ -1,12 +1,10 @@
 import os
-import typing
 
 from PyQt5.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QFileDialog
 from qfluentwidgets import PushButton
 
 from app.core.models.project import Project
 from app.ui.const import CONTAINER_MARGINS, APP_NAME
-
 
 
 class HomeView(QFrame):

@@ -1,4 +1,5 @@
+APP_NAME = 'ASub'
+APP_VER = 'alpha2'
+
 CONTAINER_MARGINS = (32, 64, 32, 32)
 NO_MARGINS = (0, 60, 0, 32)
-
-APP_NAME = 'ASub（暂定'

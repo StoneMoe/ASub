@@ -10,7 +10,7 @@ from app.core.models.project import Project, TranscribeOpt
 from app.ui.components.label import AutoLabel
 from app.ui.config import cfg
 from app.ui.const import CONTAINER_MARGINS
-from app.ui.utils import run_in_thread, clear_layout
+from app.ui.utils import run_in_thread, clear_layout, open_folder
 
 
 class ProjectView(QFrame):
@@ -121,17 +121,22 @@ class ProjectView(QFrame):
 
     def _on_btn_manage_clicked(self, pos):
         menu = RoundMenu(parent=self)
+        act_open_folder = QAction(FluentIcon.FOLDER.icon(), '打开文件夹')
         act_archive = QAction(FluentIcon.SAVE.icon(), '归档')
         act_clear_srt = QAction(FluentIcon.DELETE.icon(), '删除所有 SRT 文件')
         act_clear_ass = QAction(FluentIcon.DELETE.icon(), '删除所有 ASS 文件')
         act_delete_proj = QAction(FluentIcon.DELETE.icon(), '删除该项目')
 
-        act_archive.triggered.connect(lambda: print(MessageBox('confirm?', 'some desc', self.window()).exec()))
+        act_open_folder.triggered.connect(lambda: open_folder(self.project.path))
+        act_archive.triggered.connect(lambda: MessageBox('要归档吗？', '这个功能还没做', self.window()).exec())
         act_clear_srt.triggered.connect(lambda: print('这个功能还没做'))
         act_clear_ass.triggered.connect(lambda: print('这个功能还没做'))
         act_delete_proj.triggered.connect(self._on_act_del_proj)
 
-        menu.addAction(act_archive)
+        menu.addActions([
+            act_open_folder,
+            act_archive,
+        ])
         menu.addSeparator()
         menu.addActions([
             act_clear_srt,

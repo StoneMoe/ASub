@@ -50,8 +50,8 @@ def check_ffmpeg():
         return FFMpegStatus.UNKNOWN_ERR
 
 
-def install_ffmpeg_with_winget():
-    """Powered by ChatGPT"""
+def install_ffmpeg():
+    """Powered by ChatGPT, windows only"""
     winget_check_command = "where winget"
     result = subprocess.run(winget_check_command, shell=True, stdout=subprocess.PIPE)
     if result.returncode != 0:

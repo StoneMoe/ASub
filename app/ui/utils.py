@@ -1,5 +1,6 @@
 import functools
 import os
+import subprocess
 import sys
 import threading
 
@@ -63,3 +64,13 @@ def res_dir(relative_path):
         base_path = Core.EXEC_DIR
 
     return os.path.join(base_path, relative_path)
+
+
+def open_folder(folder_path):
+    """Open specific folder in file explorer application"""
+    if os.name == 'nt':  # Windows
+        os.startfile(folder_path)
+    elif os.name == 'posix':  # Linux, macOS, etc.
+        subprocess.Popen(['xdg-open', folder_path])
+    else:
+        raise OSError(f'Unsupported platform: {os.name}')
