@@ -153,7 +153,7 @@ class SettingView(ScrollArea):
     def _on_btn_diagnose_click(self):
         m = MessageBox(
             '扫描结果',
-            f'运行位置: {Core.EXEC_PATH}\n'
+            f'运行位置: {Core.EXEC_DIR}\n'
             # f'CUDA: {check_cuda().human_read()}\n'
             f'FFmpeg: {check_ffmpeg().human_read()}\n',
             self.window()

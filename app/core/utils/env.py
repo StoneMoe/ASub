@@ -1,4 +1,6 @@
+import os
 import subprocess
+import winreg
 from enum import Enum
 
 
@@ -46,3 +48,60 @@ def check_ffmpeg():
         return FFMpegStatus.NOT_INSTALLED
     except Exception:
         return FFMpegStatus.UNKNOWN_ERR
+
+
+def install_ffmpeg_with_winget():
+    """Powered by ChatGPT"""
+    winget_check_command = "where winget"
+    result = subprocess.run(winget_check_command, shell=True, stdout=subprocess.PIPE)
+    if result.returncode != 0:
+        print("您的系统上没有 winget，无法自动安装 FFmpeg")
+        return
+
+    package_name = "ffmpeg"
+    winget_install_command = f"winget install {package_name}"
+    result = subprocess.run(winget_install_command, shell=True)
+    if result.returncode == 0:
+        print("FFmpeg 安装成功")
+    else:
+        print("安装 FFmpeg 失败")
+
+
+def get_document_folder():
+    """Powered by ChatGPT"""
+    # Try to get the document folder path from the registry
+    try:
+        reg_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                                 "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
+        document_folder_path = winreg.QueryValueEx(reg_key, "Personal")[0]
+        winreg.CloseKey(reg_key)
+        return os.path.expandvars(document_folder_path)
+    except:
+        pass
+
+    # Try to get the document folder path from the environment variables
+    try:
+        document_folder_path = os.environ["USERPROFILE"] + "\\Documents"
+        if os.path.isdir(document_folder_path):
+            return document_folder_path
+    except:
+        pass
+
+    # Try to get the document folder path from the known folder GUID
+    try:
+        from ctypes import windll, create_unicode_buffer
+
+        # Define the GUID for the Documents folder
+        documents_guid = '{FDD39AD0-238F-46AF-ADB4-6C85480369C7}'
+
+        # Call the SHGetKnownFolderPath function to get the folder path
+        buf = create_unicode_buffer(1024)
+        if windll.shell32.SHGetKnownFolderPath(documents_guid, 0, None, buf) == 0:
+            document_folder_path = buf.value
+            if os.path.isdir(document_folder_path):
+                return document_folder_path
+    except:
+        pass
+
+    # If all else fails, return the default document folder path
+    return os.path.expanduser("~/Documents")

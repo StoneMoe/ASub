@@ -1,8 +1,11 @@
 # coding:utf-8
+import os
 from enum import Enum
 
 from qfluentwidgets import (qconfig, QConfig, ConfigItem, OptionsConfigItem, BoolValidator,
-                            OptionsValidator, EnumSerializer, FolderValidator)
+                            OptionsValidator, EnumSerializer)
+
+from app.core import Core
 
 
 class Engine(Enum):
@@ -63,7 +66,6 @@ class Config(QConfig):
     """ Config of application """
 
     # generic
-    data_folder = ConfigItem("generic", "data", "data", FolderValidator())
     ui_lang = OptionsConfigItem("generic", "lang",
                                 UILang.AUTO,
                                 OptionsValidator(UILang),
@@ -86,4 +88,4 @@ class Config(QConfig):
 
 
 cfg = Config()
-qconfig.load('./data/config.json', cfg)
+qconfig.load(os.path.join(Core.BASE_DIR, 'config.json'), cfg)

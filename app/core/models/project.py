@@ -51,7 +51,7 @@ class Project:
 
     def __init__(self, name: str, existed_err=False):
         self.name = name
-        self.path = f'{Core.DIR_PROJECTS}/{name}'
+        self.path = f'{Core.PROJ_DIR}/{name}'
         try:
             os.makedirs(self.path)
             print(f'已创建目录 {self.path}')
@@ -158,8 +158,8 @@ class Project:
     @classmethod
     def list(cls) -> List[str]:
         """list all projects"""
-        names = os.listdir(Core.DIR_PROJECTS)
-        directories = [name for name in names if os.path.isdir(os.path.join(Core.DIR_PROJECTS, name))]
+        names = os.listdir(Core.PROJ_DIR)
+        directories = [name for name in names if os.path.isdir(os.path.join(Core.PROJ_DIR, name))]
         directories = sort_titles(directories)
         return directories
 

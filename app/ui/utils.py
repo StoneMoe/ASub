@@ -7,6 +7,8 @@ from PyQt5.QtCore import pyqtSignal, QObject
 from PyQt5.QtGui import QTextCursor
 from PyQt5.QtWidgets import QTextEdit
 
+from app.core import Core
+
 
 class StdoutProxy(QObject):
     write_signal = pyqtSignal(str)
@@ -54,11 +56,10 @@ def clear_layout(layout):
 
 
 def res_dir(relative_path):
-    """ Get absolute path to resource, works for dev and for PyInstaller """
+    """Get application resource file"""
     try:
-        # PyInstaller creates a temp folder and stores path in _MEIPASS
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
+        base_path = sys._MEIPASS  # PyInstaller one file mode
+    except AttributeError:
+        base_path = Core.EXEC_DIR
 
     return os.path.join(base_path, relative_path)
