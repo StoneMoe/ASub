@@ -37,6 +37,8 @@ class TranscribeOpt:
         return f'{path}/' \
                f'{name}' \
                f'[{self.backend}]' \
+               f'[{self.model}]' \
+               f'[q{int(self.quantize)}]' \
                f'[L{self.lang or "auto"}]' \
                f'[t{"FULL" if not (self.ss and self.t) else f"{self.ss}-{self.ss + self.t}"}]' \
                f'[e{self.compress_ratio_threshold}]' \
