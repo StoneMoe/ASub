@@ -19,7 +19,6 @@ class MainWindow(FramelessWindow):
 
     def __init__(self):
         super().__init__()
-        self.hide()
         self.container = QHBoxLayout(self)
 
         self.nav = NavigationInterface(self)
@@ -40,8 +39,6 @@ class MainWindow(FramelessWindow):
         self._init_layout()
 
         self.reload_projects()
-
-        self.show()
 
     def _init_signals(self):
         sys.stdout = StdoutProxy(text_edit_widget=self.log_area)

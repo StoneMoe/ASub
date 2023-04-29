@@ -1,7 +1,7 @@
 from PyQt5.QtCore import Qt, pyqtSignal, QUrl
 from PyQt5.QtGui import QDesktopServices
 from PyQt5.QtWidgets import QWidget, QLabel
-from qfluentwidgets import FluentIcon as FIF
+from qfluentwidgets import FluentIcon
 from qfluentwidgets import MessageBox
 from qfluentwidgets import (SettingCardGroup, SwitchSettingCard, PrimaryPushSettingCard, ScrollArea,
                             ComboBoxSettingCard, ExpandLayout, Theme, InfoBar, setTheme, isDarkTheme)
@@ -30,7 +30,7 @@ class SettingView(ScrollArea):
         self.group_general = SettingCardGroup('通用', self.scroll_area)
         self.card_theme = ComboBoxSettingCard(
             cfg.themeMode,
-            FIF.BRUSH,
+            FluentIcon.BRUSH,
             '主题',
             '设置应用的主题',
             texts=['明亮', '暗黑', '跟随系统设置'],
@@ -38,7 +38,7 @@ class SettingView(ScrollArea):
         )
         self.card_ui_lang = ComboBoxSettingCard(
             cfg.ui_lang,
-            FIF.LANGUAGE, '语言',
+            FluentIcon.LANGUAGE, '语言',
             '设置界面语言',
             texts=['简体中文', '繁體中文', 'English', '跟随系统设置'],
             parent=self.group_general
@@ -48,20 +48,20 @@ class SettingView(ScrollArea):
         self.group_transcribe = SettingCardGroup('听写', self.scroll_area)
         self.card_engine = ComboBoxSettingCard(
             cfg.engine,
-            FIF.CODE, '引擎',
+            FluentIcon.CODE, '引擎',
             '设置想使用的计算模式',
             texts=['CPU', 'CUDA', 'GGML-CPU'],
             parent=self.group_transcribe
         )
         self.card_model = ComboBoxSettingCard(
             cfg.model,
-            FIF.MENU, '模型',
+            FluentIcon.MENU, '模型',
             '设置想使用的听写模型，模型越大，速度越慢，准确度越高',
             texts=['大 (~8 GB)', '中 (~5 GB)', '小 (~2 GB)', '基本 (~1 GB)', '迷你 (~1 GB)'],
             parent=self.group_transcribe
         )
         self.card_quantize = SwitchSettingCard(
-            FIF.UPDATE,
+            FluentIcon.UPDATE,
             '模型量化',
             '量化到 int8 以尝试减少系统资源的使用，可能影响准确度',
             configItem=cfg.quantize,
@@ -69,7 +69,7 @@ class SettingView(ScrollArea):
         )
         self.card_transcribe_lang = ComboBoxSettingCard(
             cfg.transcribe_lang,
-            FIF.LANGUAGE, '输出语言',
+            FluentIcon.LANGUAGE, '输出语言',
             '以第一个时间窗口为基准自动检测，或手动选择输出语言',
             texts=TranscribeLang.options(),
             parent=self.group_transcribe
@@ -79,19 +79,19 @@ class SettingView(ScrollArea):
         self.group_about = SettingCardGroup('关于', self.scroll_area)
         self.card_diagnose = PrimaryPushSettingCard(
             '诊断',
-            FIF.HELP, '运行诊断',
+            FluentIcon.HELP, '运行诊断',
             '对当前系统环境进行诊断',
             self.group_about
         )
         self.card_feedback = PrimaryPushSettingCard(
             '反馈',
-            FIF.FEEDBACK, '提供反馈',
+            FluentIcon.FEEDBACK, '提供反馈',
             '帮助我们改善这个应用',
             self.group_about
         )
         self.card_about = PrimaryPushSettingCard(
             '检查更新',
-            FIF.INFO, self.tr('关于'),
+            FluentIcon.INFO, self.tr('关于'),
             f'© 版权所有 2023, StoneMoe. 版本 {APP_VER}',
             self.group_about
         )
@@ -172,4 +172,4 @@ class SettingView(ScrollArea):
         # about
         self.card_about.clicked.connect(self.aboutSig)
         self.card_diagnose.clicked.connect(self._on_btn_diagnose_click)
-        self.card_feedback.clicked.connect(lambda: QDesktopServices.openUrl(QUrl('http://example.com')))
+        self.card_feedback.clicked.connect(lambda: QDesktopServices.openUrl(QUrl('https://example.com')))

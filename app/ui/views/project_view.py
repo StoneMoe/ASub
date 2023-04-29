@@ -1,8 +1,7 @@
 import os
 from typing import Optional
 
-from PyQt5 import QtCore
-from PyQt5.QtCore import pyqtSignal, QPoint
+from PyQt5.QtCore import pyqtSignal, QPoint, Qt
 from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QAction
 from qfluentwidgets import PushButton, FluentIcon, RoundMenu, ToolButton, MessageBox, StateToolTip
 
@@ -29,7 +28,7 @@ class ProjectView(QFrame):
         self.layout_title = QHBoxLayout(self)
         self.layout_subtitles = QVBoxLayout(self)
 
-        self.label_title = AutoLabel('<Loading>', self, QtCore.Qt.ElideMiddle)
+        self.label_title = AutoLabel('<Loading>', self, Qt.ElideMiddle)
         self.label_title.setObjectName('ViewTitle')
         self.btn_manage = ToolButton(FluentIcon.MORE, self)
         self.btn_manage.clicked.connect(
@@ -86,7 +85,7 @@ class ProjectView(QFrame):
         for filename in filenames:
             layout = QHBoxLayout(self)
 
-            label = AutoLabel(filename, self, QtCore.Qt.ElideLeft)
+            label = AutoLabel(filename, self, Qt.ElideLeft)
             label.setToolTip(filename)
 
             btn_translate = ToolButton(FluentIcon.EDIT, self)
