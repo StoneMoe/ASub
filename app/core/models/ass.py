@@ -34,7 +34,7 @@ class ASSFile:
     entries: Dict[str, List[Tuple[str, Any]]]  # {SectionName: [(Key: Value)]}
 
     def __init__(self, filepath: str):
-        with open(filepath, encoding='utf8') as f:
+        with open(filepath, encoding='utf-8-sig') as f:  # Aegisub use UTF-8 with little-endian (\ufeff)
             file_content = f.read()
 
         self.filepath = filepath
@@ -43,7 +43,6 @@ class ASSFile:
         cursor = ''  # current section
         for line in file_content.splitlines():
             line = line.strip()
-            line = line.strip('\ufeff')  # Aegisub compatibility
 
             if not line or line.startswith(';'):  # Comment & empty line
                 continue
