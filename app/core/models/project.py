@@ -1,8 +1,9 @@
 import dataclasses
 import os
 import shutil
-import subprocess
 from typing import List, Optional
+
+import ffmpeg
 
 from app.core import Core
 from app.core.consts import Consts
@@ -53,7 +54,7 @@ class Project:
 
     def __init__(self, name: str, existed_err=False):
         self.name = name
-        self.path = f'{Core.PROJ_DIR}/{name}'
+        self.path = os.path.join(Core.PROJ_DIR, name)
         try:
             os.makedirs(self.path)
             print(f'已创建目录 {self.path}')
@@ -62,22 +63,28 @@ class Project:
                 raise e
 
     def _prepare(self):
-        print(f'正在预处理 "{self.path}" 的音频')
-        wav_path = f'{self.path}/source.wav'
-        target_wav = test_files(wav_path)
-        target_mp4 = test_files(f'{self.path}/source.mp4', f'{self.path}/{self.name}.mp4',
-                                f'{self.path}/{self.name}.mp3')
-        if target_wav:
-            print(f'找到了 "{target_wav}"，不再预处理')
-        elif target_mp4:
-            print(f'找到了 "{target_mp4}"，开始预处理')
-            cmd = f'ffmpeg -i "{target_mp4}" -vn -ac 1 -ar 16000 -c:a pcm_s16le "{wav_path}"'
-            print(f'正在运行 {cmd}')
-            proc = subprocess.Popen(cmd, shell=True, cwd=os.getcwd(), stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print(f'正在预处理 "{self.name}" 的音频')
+        tmp_path = os.path.join(self.path, 'source.wav')
+        tmp_file = test_files(tmp_path)
+        src_file = test_files(
+            os.path.join(self.path, 'source.mp4'),
+            os.path.join(self.path, f'{self.name}.mp4'),
+            os.path.join(self.path, f'{self.name}.mp3')
+        )
+        if tmp_file:
+            print(f'找到了临时文件 "{tmp_file}"，跳过预处理')
+        elif src_file:
+            print(f'找到了 "{src_file}"，开始预处理')
+            proc = ffmpeg.input(src_file) \
+                .output(tmp_path, format='wav', acodec='pcm_s16le', ac=1, ar=16000) \
+                .overwrite_output() \
+                .run_async(pipe_stdout=True, pipe_stderr=True)
             for line in proc.stdout:
                 print(line.decode(Core.CODEC).rstrip())
             return_code = proc.wait()
-            print('预处理失败' if return_code != 0 else '预处理成功')
+            if return_code != 0:
+                raise ChildProcessError('无法提取音频')
+            print('预处理成功')
         else:
             raise FileNotFoundError(f'请将同名 mp4 文件放置在 {self.path}')
 
