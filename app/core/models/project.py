@@ -132,7 +132,7 @@ class Project:
                 print('正在加载模型')
                 import whisper
                 import torch
-                model = whisper.load_model(opt.model, download_root='data/whisper_model', device='cpu')
+                model = whisper.load_model(opt.model, download_root='whisper_model', device='cpu')
                 if opt.quantize:
                     print('正在量化模型')
                     model = torch.quantization.quantize_dynamic(
