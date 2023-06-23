@@ -8,6 +8,7 @@ import ffmpeg
 from app.core import Core
 from app.core.consts import Consts
 from app.core.models.srt import SRTFile
+from app.core.utils.env import check_ffmpeg, FFMpegStatus
 from app.core.utils.generic import test_files
 from app.core.utils.sort import sort_titles
 
@@ -75,6 +76,8 @@ class Project:
             print(f'找到了临时文件 "{tmp_file}"，跳过预处理')
         elif src_file:
             print(f'找到了 "{src_file}"，开始预处理')
+            if check_ffmpeg() != FFMpegStatus.READY:
+                raise EnvironmentError('FFMpeg尚未安装')
             proc = ffmpeg.input(src_file) \
                 .output(tmp_path, format='wav', acodec='pcm_s16le', ac=1, ar=16000) \
                 .overwrite_output() \
