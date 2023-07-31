@@ -3,6 +3,7 @@ import os
 from typing import Dict, Any, Tuple
 from typing import List
 
+from app.core.utils.generic import info
 from app.core.utils.translate import youdao_translate
 
 
@@ -54,22 +55,22 @@ class ASSFile:
                 name, data = line.split(':', maxsplit=1)
                 self.entries[cursor].append((name.strip(), data.strip()))
                 continue
-        print(f'自 {filepath} 载入了 {len(self.entries)} 个数据块')
+        info(f'自 {filepath} 载入了 {len(self.entries)} 个数据块')
 
     def translate(self, vocab=None):
         """translate and write to new file in realtime"""
         target_file = f"{self.filepath}.translated.{vocab or '_'}.ass"
         if os.path.isfile(target_file):
-            print(f'文件 "{target_file}" 已存在，跳过翻译')
+            info(f'文件 "{target_file}" 已存在，跳过翻译')
             return
         if vocab:
-            print(f'正在使用术语表 {vocab}')
+            info(f'正在使用术语表 {vocab}')
 
         source_text = '\n'.join([item.text for item in self.entries])
         translated_text = youdao_translate(source_text, vocab_id=vocab)
         lines = translated_text.split('\n')
         if len(self.entries) != len(lines):
-            print(f'原 {len(self.entries)} 条，翻译后 {len(lines)} 条。无法应用翻译结果')
+            info(f'原 {len(self.entries)} 条，翻译后 {len(lines)} 条。无法应用翻译结果')
             return
 
         with open(target_file, mode='w+', encoding='utf8') as f:

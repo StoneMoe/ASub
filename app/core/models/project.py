@@ -1,6 +1,7 @@
 import dataclasses
 import os
 import shutil
+from subprocess import Popen
 from typing import List, Optional
 
 import ffmpeg
@@ -9,7 +10,7 @@ from app.core import Core
 from app.core.consts import Consts
 from app.core.models.srt import SRTFile
 from app.core.utils.env import check_ffmpeg, FFMpegStatus
-from app.core.utils.generic import test_files
+from app.core.utils.generic import test_files, info
 from app.core.utils.sort import sort_titles
 
 
@@ -58,13 +59,13 @@ class Project:
         self.path = os.path.join(Core.PROJ_DIR, name)
         try:
             os.makedirs(self.path)
-            print(f'已创建目录 {self.path}')
+            info(f'已创建目录 {self.path}')
         except OSError as e:  # directory existed
             if existed_err:
                 raise e
 
     def _prepare(self):
-        print(f'正在预处理 "{self.name}" 的音频')
+        info(f'正在预处理 "{self.name}" 的音频')
         tmp_path = os.path.join(self.path, 'source.wav')
         tmp_file = test_files(tmp_path)
         src_file = test_files(
@@ -73,21 +74,20 @@ class Project:
             os.path.join(self.path, f'{self.name}.mp3')
         )
         if tmp_file:
-            print(f'找到了临时文件 "{tmp_file}"，跳过预处理')
+            info(f'找到了临时文件 "{tmp_file}"，跳过预处理')
         elif src_file:
-            print(f'找到了 "{src_file}"，开始预处理')
+            info(f'找到了 "{src_file}"，开始预处理')
             if check_ffmpeg() != FFMpegStatus.READY:
                 raise EnvironmentError('FFMpeg尚未安装')
-            proc = ffmpeg.input(src_file) \
+            proc: Popen[bytes] = ffmpeg.input(src_file) \
                 .output(tmp_path, format='wav', acodec='pcm_s16le', ac=1, ar=16000) \
                 .overwrite_output() \
                 .run_async(pipe_stdout=True, pipe_stderr=True)
-            for line in proc.stdout:
-                print(line.decode(Core.CODEC).rstrip())
+            out, err = proc.communicate()
             return_code = proc.wait()
             if return_code != 0:
                 raise ChildProcessError('无法提取音频')
-            print('预处理成功')
+            info('预处理成功')
         else:
             raise FileNotFoundError(f'请将同名 mp4 文件放置在 {self.path}')
 
@@ -105,10 +105,10 @@ class Project:
 
         target_file = opt.make_srt_filepath(name=self.name, path=self.path)
         if os.path.isfile(target_file):
-            print(f'文件 "{target_file}" 已存在，跳过听写')
+            info(f'文件 "{target_file}" 已存在，跳过听写')
             return target_file
 
-        print(f'使用 {opt}')
+        info(f'使用 {opt}')
         match opt.backend:
             # case Engine.CPP_CPU:
             #     ext = ''
@@ -132,17 +132,17 @@ class Project:
             #     for line in proc.stdout:
             #         print(line.decode(Core.CODEC).rstrip())
             case 'py-gpu' | 'py-cpu':
-                print('正在加载模型')
+                info('正在加载模型')
                 import whisper
                 import torch
                 model = whisper.load_model(opt.model, download_root='whisper_model', device='cpu')
                 if opt.quantize:
-                    print('正在量化模型')
+                    info('正在量化模型')
                     model = torch.quantization.quantize_dynamic(
                         model, {torch.nn.Linear}, dtype=torch.qint8
                     )
                 if opt.backend == 'py-gpu':
-                    print('正在加载至显卡')
+                    info('正在加载至显卡')
                     model.to('cuda')
                 result = model.transcribe(
                     audio=f'{self.path}/source.wav',
@@ -161,7 +161,7 @@ class Project:
             case _:
                 raise NotImplementedError(f'{opt.backend} 引擎尚未支持')
 
-        print('听写完成')
+        info('听写完成')
 
     def translate(self, opt: TranscribeOpt, vocab=None):
         srt = SRTFile(source=opt.make_srt_filepath(self.name, self.path))
@@ -177,16 +177,16 @@ class Project:
 
     @classmethod
     def bulk_create(cls, targets: List[tuple]):
-        print(f'正在创建 {len(targets)} 个工程')
+        info(f'正在创建 {len(targets)} 个工程')
         for proj_name, filepath in targets:
             try:
                 proj = Project(proj_name, existed_err=True)
             except OSError:
-                print(f'"{proj_name}" 已存在，不再创建')
+                info(f'"{proj_name}" 已存在，不再创建')
                 continue
 
             if filepath:
                 dst_filepath = os.path.join(proj.path, os.path.basename(filepath))
-                print(f'正在将 {filepath} 复制到 {dst_filepath}')
+                info(f'正在将 {filepath} 复制到 {dst_filepath}')
                 shutil.copy(filepath, dst_filepath)
-                print('复制完毕')
+                info('复制完毕')

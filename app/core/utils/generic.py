@@ -8,3 +8,7 @@ def test_files(*file_paths: str) -> Optional[str]:
         if os.path.isfile(path):
             return path
     return None
+
+
+def info(text):
+    print(f"ℹ️{text}")

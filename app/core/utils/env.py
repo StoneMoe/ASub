@@ -3,6 +3,8 @@ import subprocess
 import winreg
 from enum import Enum
 
+from app.core.utils.generic import info
+
 
 class CUDAStatus(Enum):
     READY = 0
@@ -55,16 +57,16 @@ def install_ffmpeg():
     winget_check_command = "where winget"
     result = subprocess.run(winget_check_command, shell=True, stdout=subprocess.PIPE)
     if result.returncode != 0:
-        print("您的系统上没有 winget，无法自动安装 FFmpeg")
+        info("您的系统上没有 winget，无法自动安装 FFmpeg")
         return
 
     package_name = "ffmpeg"
     winget_install_command = f"winget install {package_name}"
     result = subprocess.run(winget_install_command, shell=True)
     if result.returncode == 0:
-        print("FFmpeg 安装成功")
+        info("FFmpeg 安装成功")
     else:
-        print("安装 FFmpeg 失败")
+        info("安装 FFmpeg 失败")
 
 
 def get_document_folder():
