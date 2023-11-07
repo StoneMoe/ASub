@@ -3,7 +3,7 @@
     color: white;
 }
 
-MainWindow {
+MainWindow, SubtitleWindow {
     background-color: rgb(39, 39, 39);
 }
 

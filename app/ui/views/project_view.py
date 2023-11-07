@@ -6,10 +6,12 @@ from PyQt5.QtWidgets import QFrame, QVBoxLayout, QHBoxLayout, QAction
 from qfluentwidgets import PushButton, FluentIcon, RoundMenu, ToolButton, MessageBox, StateToolTip
 
 from app.core.models.project import Project, TranscribeOpt
+from app.core.utils.generic import info
 from app.ui.components.label import AutoLabel
 from app.ui.config import cfg
 from app.ui.const import CONTAINER_MARGINS
 from app.ui.utils import run_in_thread, clear_layout, open_folder
+from app.ui.windows.subtitle_window import SubtitleWindow
 
 
 class ProjectView(QFrame):
@@ -89,7 +91,8 @@ class ProjectView(QFrame):
             label.setToolTip(filename)
 
             btn_translate = ToolButton(FluentIcon.EDIT, self)
-            btn_translate.setToolTip('翻译')
+            btn_translate.setToolTip('编辑')
+            btn_translate.clicked.connect(self._on_subtitle_edit_clicked(filename))
             btn_delete = ToolButton(FluentIcon.DELETE, self)
             btn_delete.setToolTip('删除')
             btn_delete.clicked.connect(self._on_subtitle_delete_clicked(filename))
@@ -107,6 +110,15 @@ class ProjectView(QFrame):
                 if filename.endswith('.srt') or filename.endswith('.ass')
             ]
         )
+
+    def _on_subtitle_edit_clicked(self, filename):
+
+        def f():
+            target_file = os.path.join(self.project.path, filename)
+            edit_win = SubtitleWindow(target_file)
+            edit_win.exec_()
+
+        return f
 
     def _on_subtitle_delete_clicked(self, filename):
 
@@ -172,7 +184,7 @@ class ProjectView(QFrame):
         try:
             self.project.transcribe(opt)
         except Exception as e:
-            print(f'听写时发生错误: {repr(e)}')
+            info(f'听写时发生错误: {repr(e)}')
         self.sig_transcribe_running.emit(False)
         self._reload_subtitle_list()
 
