@@ -23,6 +23,7 @@ DisableProgramGroupPage=yes
 ; Remove the following line to run in administrative install mode (install for all users.)
 PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
+OutputDir={src}\dist
 OutputBaseFilename=asub_installer_inno
 Password=lrrtest
 Compression=lzma
@@ -36,8 +37,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\projects\ai_sub\dist\asub\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\projects\ai_sub\dist\asub\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "{src}\dist\asub\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "{src}\dist\asub\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

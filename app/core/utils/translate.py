@@ -7,10 +7,12 @@ import requests
 from app.core.utils.hash import sha256
 
 
-def youdao_translate(text: str, _from='ja', _to='zh-CHS', vocab_id: Optional[str] = None) -> str:
+def youdao_translate(text: str, _from='ja', _to='zh-CHS',
+                     vocab_id: Optional[str] = None,
+                     app_key: Optional[str] = None, app_secret: Optional[str] = None) -> str:
     api = 'https://openapi.youdao.com/api'
-    app_key = '4d3405e98d34b334'
-    app_sec = 'E41uYawQxPSUPAguZ4mxCPVK3AKDzy3J'
+    app_key = app_key or 'DEFAULT_KEY'
+    app_secret = app_secret or 'DEFAULT_SECRET'
     query = {
         'q': text,
         'from': _from,
@@ -26,7 +28,7 @@ def youdao_translate(text: str, _from='ja', _to='zh-CHS', vocab_id: Optional[str
         del query['vocabId']
     # sign
     sign_input = query['q'] if len(query['q']) <= 20 else query['q'][:10] + str(len(query['q'])) + query['q'][-10:]
-    query['sign'] = sha256(app_key + sign_input + query['salt'] + query['curtime'] + app_sec)
+    query['sign'] = sha256(app_key + sign_input + query['salt'] + query['curtime'] + app_secret)
     # req
     resp = requests.post(api, data=query).json()
     if resp['errorCode'] != '0':
@@ -34,5 +36,3 @@ def youdao_translate(text: str, _from='ja', _to='zh-CHS', vocab_id: Optional[str
         raise ValueError("Translate failed")
     result = resp['translation'][0]
     return result
-
-
