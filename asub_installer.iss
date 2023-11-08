@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "ASub"
-#define MyAppVersion "0.1-alpha2"
+#define MyAppVersion LoadStrFromFile(AddBackslash(SourcePath) + "VERSION")
 #define MyAppPublisher "StoneMoe"
 #define MyAppURL "https://www.example.com/"
 #define MyAppExeName "asub.exe"

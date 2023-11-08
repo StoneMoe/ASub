@@ -6,8 +6,7 @@ from typing import List, Optional
 
 import ffmpeg
 
-from app.core import Core
-from app.core.consts import Consts
+from app.core import Core, Consts
 from app.core.models.srt import SRTFile
 from app.core.utils.env import check_ffmpeg, FFMpegStatus
 from app.core.utils.generic import test_files, info

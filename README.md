@@ -8,7 +8,7 @@ Another Whisper GUI
 
 ```bash
 pip install -r requirements.dev.txt
-pyinstaller -n asub --clean --noconsole --add-data "app/ui/resource;app/ui/resource" --icon "app/ui/resource/logo.ico" --collect-data whisper.assets asub.py
+pyinstaller -n asub --clean --noconsole --add-data "VERSION;app/ui/resource" --icon "app/ui/resource/logo.ico" --collect-data whisper.assets asub.py
 ```
 
 ### Package

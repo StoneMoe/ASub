@@ -4,7 +4,8 @@ from PyQt5.QtWidgets import QFrame, QLabel, QVBoxLayout, QHBoxLayout, QFileDialo
 from qfluentwidgets import PushButton
 
 from app.core.models.project import Project
-from app.ui.const import CONTAINER_MARGINS, APP_NAME
+from app.ui.const import CONTAINER_MARGINS
+from app.core import Consts
 
 
 class HomeView(QFrame):
@@ -15,7 +16,7 @@ class HomeView(QFrame):
 
         self.layout = QVBoxLayout(self)
 
-        self.title = QLabel(APP_NAME)
+        self.title = QLabel(Consts.APP_NAME)
         self.title.setObjectName('app-title')
         self.desc = QLabel('在下方新建项目，或在左侧查看已有项目')
         self.desc.setObjectName('app-desc')

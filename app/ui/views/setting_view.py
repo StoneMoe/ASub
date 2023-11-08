@@ -6,11 +6,9 @@ from qfluentwidgets import MessageBox
 from qfluentwidgets import (SettingCardGroup, SwitchSettingCard, PrimaryPushSettingCard, ScrollArea,
                             ComboBoxSettingCard, ExpandLayout, Theme, InfoBar, setTheme, isDarkTheme)
 
-from app.core import Core
-from app.core.utils.env import check_ffmpeg
+from app.core import Core, Consts
+from app.core.utils.env import check_ffmpeg, res_dir
 from app.ui.config import cfg, TranscribeLang
-from app.ui.const import APP_VER
-from app.ui.utils import res_dir
 
 
 class SettingView(ScrollArea):
@@ -92,7 +90,7 @@ class SettingView(ScrollArea):
         self.card_about = PrimaryPushSettingCard(
             '检查更新',
             FluentIcon.INFO, self.tr('关于'),
-            f'© 版权所有 2023, StoneMoe. 版本 {APP_VER}',
+            f'© 版权所有 2023, StoneMoe. 版本 {Consts.APP_VER}',
             self.group_about
         )
 

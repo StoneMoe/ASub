@@ -4,7 +4,6 @@ from typing import Dict, Any, Tuple
 from typing import List
 
 from app.core.utils.generic import info
-from app.core.utils.translate import youdao_translate
 
 
 @dataclasses.dataclass
@@ -66,19 +65,7 @@ class ASSFile:
         if vocab:
             info(f'正在使用术语表 {vocab}')
 
-        source_text = '\n'.join([item.text for item in self.entries])
-        translated_text = youdao_translate(source_text, vocab_id=vocab)
-        lines = translated_text.split('\n')
-        if len(self.entries) != len(lines):
-            info(f'原 {len(self.entries)} 条，翻译后 {len(lines)} 条。无法应用翻译结果')
-            return
-
-        with open(target_file, mode='w+', encoding='utf8') as f:
-            for i, line in enumerate(lines):
-                f.write(self.entries[i].dumps())
-                f.write('\n')
-                f.write(line)
-                f.write('\n\n')
+        # TODO: ASS subtitle file translate support
 
 
 if __name__ == '__main__':

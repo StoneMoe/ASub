@@ -1,6 +1,6 @@
 import os
 import subprocess
-import winreg
+import sys
 from enum import Enum
 
 from app.core.utils.generic import info
@@ -71,39 +71,60 @@ def install_ffmpeg():
 
 def get_document_folder():
     """Powered by ChatGPT"""
-    # Try to get the document folder path from the registry
-    try:
-        reg_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
-                                 "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
-        document_folder_path = winreg.QueryValueEx(reg_key, "Personal")[0]
-        winreg.CloseKey(reg_key)
-        return os.path.expandvars(document_folder_path)
-    except:
-        pass
+    if os.name == 'nt':  # If it's Windows
+        # Try to get the document folder path from the registry
+        try:
+            import winreg
+            reg_key = winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+                                     "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders")
+            document_folder_path = winreg.QueryValueEx(reg_key, "Personal")[0]
+            winreg.CloseKey(reg_key)
+            return os.path.expandvars(document_folder_path)
+        except:
+            pass
 
-    # Try to get the document folder path from the environment variables
-    try:
-        document_folder_path = os.environ["USERPROFILE"] + "\\Documents"
-        if os.path.isdir(document_folder_path):
-            return document_folder_path
-    except:
-        pass
-
-    # Try to get the document folder path from the known folder GUID
-    try:
-        from ctypes import windll, create_unicode_buffer
-
-        # Define the GUID for the Documents folder
-        documents_guid = '{FDD39AD0-238F-46AF-ADB4-6C85480369C7}'
-
-        # Call the SHGetKnownFolderPath function to get the folder path
-        buf = create_unicode_buffer(1024)
-        if windll.shell32.SHGetKnownFolderPath(documents_guid, 0, None, buf) == 0:
-            document_folder_path = buf.value
+        # Try to get the document folder path from the environment variables
+        try:
+            document_folder_path = os.environ["USERPROFILE"] + "\\Documents"
             if os.path.isdir(document_folder_path):
                 return document_folder_path
-    except:
-        pass
+        except:
+            pass
+
+        # Try to get the document folder path from the known folder GUID
+        try:
+            from ctypes import windll, create_unicode_buffer
+
+            # Define the GUID for the Documents folder
+            documents_guid = '{FDD39AD0-238F-46AF-ADB4-6C85480369C7}'
+
+            # Call the SHGetKnownFolderPath function to get the folder path
+            buf = create_unicode_buffer(1024)
+            if windll.shell32.SHGetKnownFolderPath(documents_guid, 0, None, buf) == 0:
+                document_folder_path = buf.value
+                if os.path.isdir(document_folder_path):
+                    return document_folder_path
+        except:
+            pass
 
     # If all else fails, return the default document folder path
     return os.path.expanduser("~/Documents")
+
+
+def res_dir(relative_path):
+    """Get application resource file"""
+    try:
+        # noinspection PyUnresolvedReferences,PyProtectedMember
+        base_path = sys._MEIPASS  # PyInstaller one file mode
+    except AttributeError:
+        base_path = get_exec_dir()
+
+    return os.path.join(base_path, relative_path)
+
+
+def get_base_dir():
+    return os.path.join(get_document_folder(), 'ASub')
+
+
+def get_exec_dir():
+    return os.path.dirname(os.path.abspath(sys.argv[0]))

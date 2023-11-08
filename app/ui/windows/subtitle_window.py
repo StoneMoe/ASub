@@ -4,7 +4,7 @@ from qframelesswindow import FramelessWindow
 
 from app.core.models.srt import SRTFile
 from app.ui.const import CONTAINER_MARGINS
-from app.ui.utils import res_dir
+from app.core.utils.env import res_dir
 
 
 class SubtitleWindow(QDialog, FramelessWindow):

@@ -56,16 +56,6 @@ def clear_layout(layout):
             clear_layout(child.layout())
 
 
-def res_dir(relative_path):
-    """Get application resource file"""
-    try:
-        base_path = sys._MEIPASS  # PyInstaller one file mode
-    except AttributeError:
-        base_path = Core.EXEC_DIR
-
-    return os.path.join(base_path, relative_path)
-
-
 def open_folder(folder_path):
     """Open specific folder in file explorer application"""
     if os.name == 'nt':  # Windows

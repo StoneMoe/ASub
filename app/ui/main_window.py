@@ -9,8 +9,9 @@ from qframelesswindow import FramelessWindow
 
 from app.core.models.project import Project
 from app.ui.config import cfg
-from app.ui.const import APP_NAME
-from app.ui.utils import StdoutProxy, res_dir
+from app.core import Consts
+from app.ui.utils import StdoutProxy
+from app.core.utils.env import res_dir
 from app.ui.views import HomeView, ProjectView, SettingView
 from app.ui.widgets import FancyTitleBar
 
@@ -54,7 +55,7 @@ class MainWindow(FramelessWindow):
         self.titleBar.setAttribute(Qt.WA_StyledBackground)
 
         self.setWindowIcon(QIcon(res_dir('app/ui/resource/logo.jpg')))
-        self.setWindowTitle(APP_NAME)
+        self.setWindowTitle(Consts.APP_NAME)
 
         # screen center
         desktop = QApplication.screens()[0].availableGeometry()
