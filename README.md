@@ -7,9 +7,10 @@ Another Whisper GUI
 ### Build
 
 ```bash
-pip install -r requirements.dev.txt
-pyinstaller -n asub --clean --noconsole --add-data "VERSION;app/ui/resource" --icon "app/ui/resource/logo.ico" --collect-data whisper.assets asub.py
+pyinstaller -n asub --clean --noconsole --add-data "VERSION;." --add-data "app/ui/resource;app/ui/resource" --icon "app/ui/resource/logo.ico" --collect-data whisper.assets asub.py
 ```
+For Linux, change the `;`(semicolon) to `:`(colon) in `--add-data` option  
+because pyinstaller use `os.pathsep` to parse this value
 
 ### Package
 Install **Inno Setup** first, then run:
