@@ -14,7 +14,7 @@ jobs:
     - name: Set variables
       id: asub_env
       run: |
-        $file_text = Get-Content "new.txt"
+        $file_text = Get-Content "VERSION"
         echo "::set-output name=version::$file_text"
 
     - name: Setup Python
@@ -41,5 +41,5 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        name: ${​​​​​​​​​{​​​​​​​​​ steps.asub_env.outputs.version }​​​​​​​​​}​​​​​​​​​
+        name: ${{ steps.asub_env.outputs.version }}​​​​​​​​
         files: .\dist\asub_installer_inno.exe
