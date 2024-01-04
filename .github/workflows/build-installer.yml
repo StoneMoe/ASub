@@ -12,9 +12,10 @@ jobs:
       uses: actions/checkout@v2
 
     - name: Set variables
+      id: asub_env
       run: |
-        VER=$(cat VERSION)
-        echo "VERSION=$VER" >> $GITHUB_ENV
+        $file_text = Get-Content "new.txt"
+        echo "::set-output name=version::$file_text"
 
     - name: Setup Python
       uses: actions/setup-python@v4.7.1
@@ -40,5 +41,5 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        name: ${{ env.VERSION }}
+        name: ${​​​​​​​​​{​​​​​​​​​ steps.asub_env.outputs.version }​​​​​​​​​}​​​​​​​​​
         files: .\dist\asub_installer_inno.exe
