@@ -11,6 +11,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: Set variables
+      run: |
+        VER=$(cat VERSION)
+        echo "VERSION=$VER" >> $GITHUB_ENV
+
     - name: Setup Python
       uses: actions/setup-python@v4.7.1
       with:
@@ -31,3 +36,9 @@ jobs:
     - name: Pack
       run: |
         .\scripts\release\pack.bat
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: ${{ env.VERSION }}
+        files: .\dist\asub_installer_inno.exe
